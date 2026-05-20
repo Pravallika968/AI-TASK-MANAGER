@@ -1,0 +1,23 @@
+
+# ===== FRONTEND =====
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.vite/
+
+# ===== BACKEND =====
+backend/target/
+backend/*.jar
+
+# ===== IDE =====
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# ===== SYSTEM =====
+.DS_Store
+*.log
+.env
