@@ -20,4 +20,5 @@ public class TaskRequest {
     private LocalDate dueDate;
 
     private TaskStatus status;
+    private String estimatedEffort;
 }

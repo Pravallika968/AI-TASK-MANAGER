@@ -41,8 +41,8 @@ function Register() {
       // Success toast
       toast.success("Registration successful 🚀");
 
-      // Redirect to Home
-      navigate("/home");
+      // Redirect to login
+      navigate("/login");
 
     } catch (err) {
       console.error(err);

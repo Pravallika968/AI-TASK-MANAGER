@@ -49,6 +49,7 @@ public class TaskServiceImpl implements TaskService {
                 .priority(request.getPriority())
                 .dueDate(request.getDueDate())
                 .status(request.getStatus())
+                .estimatedEffort(request.getEstimatedEffort())
                 .user(user)
                 .build();
 
@@ -101,6 +102,7 @@ public class TaskServiceImpl implements TaskService {
         task.setPriority(request.getPriority());
         task.setDueDate(request.getDueDate());
         task.setStatus(request.getStatus());
+        task.setEstimatedEffort(request.getEstimatedEffort());
 
         Task updatedTask =
                 taskRepository.save(task);

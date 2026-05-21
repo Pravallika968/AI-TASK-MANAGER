@@ -26,7 +26,6 @@ function Tasks() {
     }
   };
 
-  // DELETE TASK
   const handleDelete = async (id) => {
     try {
       await deleteTask(id);
@@ -37,7 +36,6 @@ function Tasks() {
     }
   };
 
-  // UPDATE STATUS
   const handleStatusChange = async (id, status) => {
     try {
       await updateStatus(id, status);
@@ -48,20 +46,15 @@ function Tasks() {
     }
   };
 
-  // OPEN EDIT
   const handleEdit = (task) => {
     setEditingTask(task);
   };
 
-  // SAVE UPDATE
   const handleUpdate = async () => {
     try {
       setLoading(true);
-
       await updateTask(editingTask.id, editingTask);
-
       toast.success("Task updated ✏️");
-
       setEditingTask(null);
       loadTasks();
     } catch (err) {
@@ -75,94 +68,72 @@ function Tasks() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-slate-100 p-8">
+      {/* TASK PAGE */}
+      <div className="min-h-screen bg-slate-100 p-8 text-gray-900">
         <div className="max-w-6xl mx-auto">
 
-          {/* HEADER */}
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900">
-              All Tasks
-            </h1>
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold">All Tasks</h1>
           </div>
 
-          {/* TASKS */}
           <div className="space-y-5">
             {tasks.length === 0 ? (
-              <div className="bg-white rounded-2xl shadow-md p-8 text-center">
-                <h2 className="text-2xl font-semibold text-gray-700">
-                  No Tasks Found
-                </h2>
-                <p className="text-gray-500 mt-2">
-                  Create a task to get started 🚀
-                </p>
+              <div className="bg-white p-8 rounded-2xl text-center shadow-md">
+                No Tasks Found 🚀
               </div>
             ) : (
               tasks.map((task) => (
                 <div
                   key={task.id}
-                  className="bg-white border border-gray-200 p-5 rounded-2xl shadow-md flex justify-between items-start hover:shadow-lg transition duration-300"
+                  className="bg-white p-5 rounded-2xl shadow-md flex justify-between"
                 >
-                  {/* LEFT SIDE */}
+                  {/* LEFT */}
                   <div className="w-full">
-                    <h2 className="text-2xl font-bold text-gray-900">
-                      {task.title}
-                    </h2>
+                    <h2 className="text-2xl font-bold">{task.title}</h2>
 
                     <p className="text-gray-700 mt-2">
                       {task.description || "No description"}
                     </p>
 
-                    <div className="flex flex-wrap gap-3 mt-4 text-sm">
-                      <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
-                        Priority: {task.priority}
+                    <div className="flex gap-3 mt-4 text-sm">
+                      <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
+                        {task.priority}
                       </span>
 
-                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
-                        Due: {task.dueDate || "Not Set"}
+                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                        {task.dueDate || "No date"}
                       </span>
 
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
-                        Effort: {task.estimatedEffort || "N/A"}
-                      </span>
-                    </div>
-
-                    <div className="mt-4">
-                      <span className="font-semibold text-gray-800">
-                        Status:
-                      </span>
-
-                      <span className="ml-2 text-indigo-600 font-bold">
-                        {task.status}
+                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                        {task.estimatedEffort || "No effort"}
                       </span>
                     </div>
                   </div>
 
-                  {/* RIGHT ACTIONS */}
+                  {/* ACTIONS */}
                   <div className="flex flex-col gap-3 ml-5">
                     <select
                       value={task.status}
                       onChange={(e) =>
                         handleStatusChange(task.id, e.target.value)
                       }
-                      className="border border-gray-300 p-2 rounded-lg text-gray-800"
+                      className="border p-2 rounded-lg"
                     >
                       <option value="TODO">TODO</option>
-                      <option value="IN_PROGRESS">
-                        IN PROGRESS
-                      </option>
+                      <option value="IN_PROGRESS">IN_PROGRESS</option>
                       <option value="DONE">DONE</option>
                     </select>
 
                     <button
                       onClick={() => handleEdit(task)}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                      className="bg-yellow-500 text-white px-4 py-2 rounded-lg"
                     >
                       Edit
                     </button>
 
                     <button
                       onClick={() => handleDelete(task.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition"
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg"
                     >
                       Delete
                     </button>
@@ -171,89 +142,114 @@ function Tasks() {
               ))
             )}
           </div>
-
-          {/* EDIT MODAL */}
-          {editingTask && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-
-              <div className="bg-white rounded-2xl shadow-xl p-6 w-[450px]">
-
-                <h2 className="text-2xl font-bold text-gray-900 mb-5">
-                  Edit Task
-                </h2>
-
-                <input
-                  className="border border-gray-300 text-gray-900 p-3 w-full mb-3 rounded-lg"
-                  value={editingTask.title}
-                  onChange={(e) =>
-                    setEditingTask({
-                      ...editingTask,
-                      title: e.target.value,
-                    })
-                  }
-                />
-
-                <textarea
-                  className="border border-gray-300 text-gray-900 p-3 w-full mb-3 rounded-lg"
-                  rows="4"
-                  value={editingTask.description}
-                  onChange={(e) =>
-                    setEditingTask({
-                      ...editingTask,
-                      description: e.target.value,
-                    })
-                  }
-                />
-
-                <select
-                  className="border border-gray-300 text-gray-900 p-3 w-full mb-3 rounded-lg"
-                  value={editingTask.priority}
-                  onChange={(e) =>
-                    setEditingTask({
-                      ...editingTask,
-                      priority: e.target.value,
-                    })
-                  }
-                >
-                  <option value="LOW">LOW</option>
-                  <option value="MEDIUM">MEDIUM</option>
-                  <option value="HIGH">HIGH</option>
-                </select>
-
-                <input
-                  type="date"
-                  className="border border-gray-300 text-gray-900 p-3 w-full mb-5 rounded-lg"
-                  value={editingTask.dueDate || ""}
-                  onChange={(e) =>
-                    setEditingTask({
-                      ...editingTask,
-                      dueDate: e.target.value,
-                    })
-                  }
-                />
-
-                <div className="flex justify-end gap-3">
-                  <button
-                    onClick={() => setEditingTask(null)}
-                    className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg"
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    onClick={handleUpdate}
-                    disabled={loading}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
-                  >
-                    {loading ? "Saving..." : "Save"}
-                  </button>
-                </div>
-
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* MODAL */}
+      {editingTask && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+          {/* MODAL BOX */}
+          <div className="bg-white w-[550px] max-w-[95vw] rounded-2xl shadow-2xl overflow-hidden">
+
+            {/* HEADER */}
+            <div className="bg-blue-600 p-4">
+              <h2 className="text-xl font-bold text-center text-white">
+                ✏️ Edit Task
+              </h2>
+            </div>
+
+            {/* FORM */}
+            <div className="p-6 text-gray-900">
+
+              {/* TITLE */}
+              <label className="text-sm font-semibold text-gray-700">Title</label>
+              <input
+                value={editingTask.title}
+                onChange={(e) =>
+                  setEditingTask({ ...editingTask, title: e.target.value })
+                }
+                className="border border-gray-300 text-gray-900 p-3 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+
+              {/* DESCRIPTION */}
+              <label className="text-sm font-semibold text-gray-700">Description</label>
+              <textarea
+                value={editingTask.description}
+                onChange={(e) =>
+                  setEditingTask({
+                    ...editingTask,
+                    description: e.target.value,
+                  })
+                }
+                className="border border-gray-300 text-gray-900 p-3 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+
+              {/* PRIORITY */}
+              <label className="text-sm font-semibold text-gray-700">Priority</label>
+              <select
+                value={editingTask.priority}
+                onChange={(e) =>
+                  setEditingTask({ ...editingTask, priority: e.target.value })
+                }
+                className="border border-gray-300 text-gray-900 p-3 w-full mb-3 rounded-lg"
+              >
+                <option value="LOW">LOW</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="HIGH">HIGH</option>
+              </select>
+
+              {/* DUE DATE */}
+              <label className="text-sm font-semibold text-gray-700">Due Date</label>
+              <input
+                type="date"
+                value={editingTask.dueDate || ""}
+                onChange={(e) =>
+                  setEditingTask({ ...editingTask, dueDate: e.target.value })
+                }
+                className="border border-gray-300 text-gray-900 p-3 w-full mb-3 rounded-lg"
+              />
+
+              {/* EFFORT */}
+              <label className="text-sm font-semibold text-gray-700">
+                Estimated Effort
+              </label>
+              <input
+                type="text"
+                value={editingTask.estimatedEffort || ""}
+                onChange={(e) =>
+                  setEditingTask({
+                    ...editingTask,
+                    estimatedEffort: e.target.value,
+                  })
+                }
+                className="border border-gray-300 text-gray-900 p-3 w-full mb-5 rounded-lg"
+              />
+
+              {/* BUTTONS */}
+              <div className="flex justify-end gap-3">
+
+                <button
+                  onClick={() => setEditingTask(null)}
+                  className="bg-gray-400 px-4 py-2 rounded-lg text-white"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={handleUpdate}
+                  disabled={loading}
+                  className="bg-green-600 px-4 py-2 rounded-lg text-white"
+                >
+                  {loading ? "Saving..." : "Save"}
+                </button>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
